@@ -18,18 +18,22 @@ class Users extends Migration
             'username' => [
                 'type'       => 'VARCHAR',
                 'constraint' => '150',
+                'unique' => true
             ],
             'email' => [
                 'type'       => 'VARCHAR',
                 'constraint' => '150',
+                'unique' => true
             ],
             'password' => [
                 'type'       => 'VARCHAR',
                 'constraint' => '150',
+                'null'       => false
             ],
             'role' => [
-                'type'       => 'VARCHAR',
-                'constraint' => '20',
+                'type'       => 'ENUM("admin", "mahasiswa", "dosen")',
+                'default'    => 'mahasiswa',
+                'null'       => false
             ],
         ]);
         $this->forge->addKey('id', true);
