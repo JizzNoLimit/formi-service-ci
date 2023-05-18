@@ -73,7 +73,7 @@ class UserController extends ResourceController
         $data = [
             "username" => (string) $username,
             "email"    => (string) $email,
-            "password" => (string) $password,
+            "password" => password_hash($password, PASSWORD_DEFAULT),
             "role"     => (string) $role,
         ];
         $this->UserModel->insert($data);
