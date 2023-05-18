@@ -61,11 +61,11 @@ class UserController extends ResourceController
         $last_name = $this->Request->getVar('last_name');
 
         $user = $this->UserModel->where('username', $username)->orWhere('email', $email)->first();
-        if ($username === $user->username) {
+        if ($user != null && $username === $user->username) {
             return $this->respond([
                 "message" => "username ". $username .  " sudah digunakan"
             ], 302);
-        } elseif ($email === $user->email) {
+        } elseif ($user != null && $email === $user->email) {
             return $this->respond([
                 "message" => $email .  " sudah terdaftar"
             ], 302);
@@ -91,7 +91,7 @@ class UserController extends ResourceController
         $this->ProfileModel->insert($profile);
 
         return $this->respondCreated([
-            "message" => "berhasil membuat user " . $username
+            "message" => "berhasih menambahkan data user"
         ]);
     }
 
