@@ -28,10 +28,10 @@ class UserController extends ResourceController
 
         $offset = $limit * $page;
 
-        $totalRows = $this->UserModel->totalData($search);
+        $totalRows = $this->ProfileModel->totalData($search);
         $totalPage = ceil($totalRows / $limit);
 
-        $users = $this->ProfileModel->getUser($offset, $limit);
+        $users = $this->ProfileModel->getUser($search, $offset, $limit);
         if ($users === []) { $totalPage = 0; }
 
         $data = [
@@ -41,7 +41,8 @@ class UserController extends ResourceController
                 "page"      => $page == 0 ? 1 : $page,
                 "totalRows" => $totalRows,
                 "totalPage" => $totalPage,
-                "offset"    => $offset
+                "offset"    => $offset,
+                "limit"     => $limit
             ]
         ];
         return $this->respond($data, 200);

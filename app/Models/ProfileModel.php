@@ -20,9 +20,10 @@ class ProfileModel extends Model
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
 
-    public function getUser($offset, $limit) {
+    public function getUser($search, $offset, $limit) {
         $builder = $this->db->table('profile');
         $builder->join('users', 'users.id = profile.user_id');
+        $builder->like('nim', $search)->orLike('username', $search)->orLike('email', $search);
         $query = $builder->get($limit, $offset);
         return $query->getResult();
     }
@@ -35,5 +36,14 @@ class ProfileModel extends Model
         $builder->where('user_id', $id);
         $query = $builder->get();
         return $query->getResult();
+    }
+
+    function totalData($search) {
+        $builder = $this->db->table('profile');
+        $builder->select('users.username, users.email, nim');
+        $builder->join('users', 'users.id = profile.user_id');
+        $builder->like('nim', $search)->orLike('username', $search)->orLike('email', $search);
+        $query = $builder->countAllResults();
+        return $query;
     }
 }
