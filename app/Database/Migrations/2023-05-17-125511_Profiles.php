@@ -20,7 +20,12 @@ class Profiles extends Migration
                 'constraint' => '20',
                 'null'       => false
             ],
-            'nama' => [
+            'first_name' => [
+                'type'       => 'VARCHAR',
+                'constraint' => '150',
+                'null'       => true
+            ],
+            'last_name' => [
                 'type'       => 'VARCHAR',
                 'constraint' => '150',
                 'null'       => true
@@ -30,7 +35,7 @@ class Profiles extends Migration
                 'unsigned'   => true,
                 'null'       => true
             ],
-            'lokasi' => [
+            'alamat' => [
                 'type'       => 'VARCHAR',
                 'constraint' => '150',
                 'null'       => true
@@ -45,29 +50,31 @@ class Profiles extends Migration
                 'null'       => true
             ],
             'user_id' => [
-                'type'           => 'BIGINT',
-                'constraint'     => 10,
-                'unsigned'       => true,
+                'type'          => 'BIGINT',
+                'constraint'    => 10,
+                'unsigned'      => true,
+                'null'          => true,
+                'unique'        => true
             ],
-            'create_at' => [
-                'type'     => 'BIGINT',
-                'unsigned' => true,
-                'null'     => true
+            'created_at' => [
+                'type'      => 'BIGINT',
+                'unsigned'  => true,
+                'null'      => true
             ],
-            'update_at' => [
-                'type'     => 'BIGINT',
-                'unsigned' => true,
-                'null'     => true
-            ],
+            'updated_at' => [
+                'type'      => 'BIGINT',
+                'unsigned'  => true,
+                'null'      => true
+            ]
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->addForeignKey('user_id', 'users', 'id');
+        $this->forge->addForeignKey('user_id', 'users', 'id', 'NO ACTION', 'CASCADE', 'fk_users_id');
         $this->forge->createTable('profile');
     }
 
     public function down()
     {
-        $this->forge->dropForeignKey('profile', 'profile_user_id_foreign');
+        $this->forge->dropForeignKey('profile', 'fk_users_id');
         $this->forge->dropTable('profile');
     }
 }

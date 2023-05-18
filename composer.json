@@ -6,7 +6,6 @@
     "license": "MIT",
     "require": {
         "php": "^7.4 || ^8.0",
-        "chriskacerguis/codeigniter-restserver": "^3.1",
         "codeigniter4/framework": "^4.0"
     },
     "require-dev": {
