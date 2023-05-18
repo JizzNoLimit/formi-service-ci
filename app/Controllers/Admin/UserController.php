@@ -63,11 +63,11 @@ class UserController extends ResourceController
         $user = $this->UserModel->where('username', $username)->orWhere('email', $email)->first();
         if ($username === $user->username) {
             return $this->respond([
-                "message" => "username sudah digunakan"
+                "message" => "username ". $username .  " sudah digunakan"
             ], 302);
         } elseif ($email === $user->email) {
             return $this->respond([
-                "message" => "email sudah digunakan"
+                "message" => $email .  " sudah terdaftar"
             ], 302);
         }
 
