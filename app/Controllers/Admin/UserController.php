@@ -154,4 +154,25 @@ class UserController extends ResourceController
             "message" => "data ". $user->username . " berhasil diupdate" 
         ], 201);
     }
+
+    public function hapusUser($id) {
+        $user = $this->UserModel->find($id);
+
+        if ($user == null) {
+            return $this->respond([
+                "status"  => "error",
+                "message" => [
+                    "error" => "hapus data gagal, user tidak ditemukan"
+                ]
+            ]);
+        }
+
+        $this->UserModel->delete($id);
+
+        return $this->respond([
+            "status"  => "ok",
+            "message" => "hapus data user berhasil",
+            "data"    => $user
+        ]);
+    }
 }

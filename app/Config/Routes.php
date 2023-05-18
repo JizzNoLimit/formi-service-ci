@@ -35,6 +35,7 @@ $routes->group('api/v1', function($routes) {
         $routes->get('users/(:segment)', 'Admin\UserController::tampilUsersId/$1');
         $routes->post('users', 'Admin\UserController::tambahUser');
         $routes->put('users/(:segment)', 'Admin\UserController::editUser/$1');
+        $routes->delete('users/(:segment)', 'Admin\UserController::hapusUser/$1');
     });
     $routes->post('users', 'UserController::createUser');
 });
