@@ -48,8 +48,22 @@ class UserController extends ResourceController
         return $this->respond($data, 200);
     }
 
-    public function tambahUser()
-    {
+    public function tampilUsersId($id) {
+        $users = $this->ProfileModel->getUserId($id);
+        if ($users == null) {
+            return $this->failNotFound("data tidak ditemukan, mohon diperiksa kembali");
+        }
+        $user = $users[0];
+
+        $data = [
+            "status"   => 200,
+            "message"  => "data detail  forum mahasiswa jurusan manajemen informatika",
+            "data"     => $user
+        ];
+        return $this->respond($data, 200);
+    }
+
+    public function tambahUser() {
         // Inser data user
         $username = $this->Request->getVar('username');
         $email = $this->Request->getVar('email');

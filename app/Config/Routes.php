@@ -32,6 +32,7 @@ $routes->set404Override();
 $routes->group('api/v1', function($routes) {
     $routes->group('admin', function ($routes) {
         $routes->get('users', 'Admin\UserController::tampilUsers');
+        $routes->get('users/(:segment)', 'Admin\UserController::tampilUsersId/$1');
         $routes->post('users', 'Admin\UserController::tambahUser');
         $routes->put('users/(:segment)', 'Admin\UserController::editUser/$1');
     });
