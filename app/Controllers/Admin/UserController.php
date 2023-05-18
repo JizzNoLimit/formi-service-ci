@@ -22,7 +22,7 @@ class UserController extends ResourceController
         // Show users
         $search = (string) $this->Request->getGet('search_query');
         $page = intval($this->Request->getGet('page'));
-        $limit = intval($this->Request->getGet('limit'));
+        $limit = intval($this->Request->getGet('limit') != null ? $this->Request->getGet('limit') : 10);
         
         if ($page == 1) { $page = 0; }
 
@@ -38,7 +38,7 @@ class UserController extends ResourceController
             "message"  => "user forum mahasiswa jurusan manajemen informatika",
             "data"     => $users,
             "metadata" => [
-                "page"      => $page,
+                "page"      => $page == 0 ? 1 : $page,
                 "totalRows" => $totalRows,
                 "totalPage" => $totalPage,
                 "offset"    => $offset
