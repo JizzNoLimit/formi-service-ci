@@ -30,11 +30,12 @@ $routes->set404Override();
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 $routes->group('api/v1', function($routes) {
-        $routes->group('admin', function ($routes) {
-            $routes->get('users', 'Admin\UserController::tampilUsers');
-            $routes->post('users', 'Admin\UserController::tambahUser');
-        });
-        $routes->post('users', 'UserController::createUser');
+    $routes->group('admin', function ($routes) {
+        $routes->get('users', 'Admin\UserController::tampilUsers');
+        $routes->post('users', 'Admin\UserController::tambahUser');
+        $routes->put('users/(:segment)', 'Admin\UserController::editUser/$1');
+    });
+    $routes->post('users', 'UserController::createUser');
 });
 
 /*

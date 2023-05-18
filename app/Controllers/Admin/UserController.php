@@ -60,11 +60,11 @@ class UserController extends ResourceController
         $last_name = $this->Request->getVar('last_name');
 
         $user = $this->UserModel->where('username', $username)->orWhere('email', $email)->first();
-        if ($user->username === $username) {
+        if ($username === $user->username) {
             return $this->respond([
                 "message" => "username sudah digunakan"
             ], 302);
-        } elseif ($user->email === $email) {
+        } elseif ($email === $user->email) {
             return $this->respond([
                 "message" => "email sudah digunakan"
             ], 302);
@@ -90,7 +90,53 @@ class UserController extends ResourceController
         $this->ProfileModel->insert($profile);
 
         return $this->respondCreated([
-            "message" => "berhasil membuat user"
+            "message" => "berhasil membuat user " . $username
         ]);
+    }
+
+    public function editUser($id) {
+        # Edit user by id
+        $user = $this->ProfileModel->getUserId($id)[0];
+
+        $username = $this->Request->getVar('username');
+        $email = $this->Request->getVar('email');
+        $password = $this->Request->getVar('password');
+        $role = $this->Request->getVar('role');
+        $nim = $this->Request->getVar('nim');
+        $first_name = $this->Request->getVar('first_name');
+        $last_name = $this->Request->getVar('last_name');
+
+        if ($username === $user->username) {
+            return $this->respond([
+                "message" => "username: ". $username ."sudah digunakan"
+            ], 302);
+        } elseif ($email === $user->email) {
+            return $this->respond([
+                "message" => "email: " . $email . " sudah digunakan"
+            ], 302);
+        }
+
+        $hash = password_hash($password, PASSWORD_DEFAULT);
+
+        $data = [
+            "username" => (string) $username != null ? $username : $user->username,
+            "email"    => (string) $email != null ? $email : $user->email,
+            "password" => (string) $password != null ? $hash : $user->password,
+            "role"     => (string) $role != null ? $role : $user->role,
+        ];
+
+        $this->UserModel->update($id, $data);
+
+        $profile = [
+            "nim"        => (string) $nim != null ? $nim : $user->nim,
+            "first_name" => (string) $first_name != null ? $first_name : $user->first_name,
+            "last_name"  => (string) $last_name != null ? $last_name : $user->last_name,
+        ];
+
+        $this->ProfileModel->update($user->id, $profile);
+
+        return $this->respond([
+            "message" => "data ". $user->username . " berhasil diupdate" 
+        ], 201);
     }
 }

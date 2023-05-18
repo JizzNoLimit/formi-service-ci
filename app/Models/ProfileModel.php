@@ -26,4 +26,14 @@ class ProfileModel extends Model
         $query = $builder->get($limit, $offset);
         return $query->getResult();
     }
+
+    public function getUserId($id)
+    {
+        $builder = $this->db->table('profile');
+        $builder->select('profile.id, users.username, users.email, users.password, users.role, nim, first_name, last_name, tgl_lahir, alamat, bio, foto, user_id, created_at, updated_at');
+        $builder->join('users', 'users.id = profile.user_id');
+        $builder->where('user_id', $id);
+        $query = $builder->get();
+        return $query->getResult();
+    }
 }
