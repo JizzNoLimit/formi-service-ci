@@ -37,6 +37,9 @@ $routes->group('api/v1', function($routes) {
         $routes->put('users/(:segment)', 'Admin\UserController::editUser/$1');
         $routes->delete('users/(:segment)', 'Admin\UserController::hapusUser/$1');
     });
+    $routes->group('auth', function($routes) {
+        $routes->post('login', 'AuthController::login');
+    });
     $routes->post('users', 'UserController::createUser');
 });
 

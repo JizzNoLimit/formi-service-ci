@@ -35,6 +35,7 @@ class UserController extends ResourceController
         if ($users === []) { $totalPage = 0; }
 
         $data = [
+            "status"   => "ok",
             "message"  => "user forum mahasiswa jurusan manajemen informatika",
             "data"     => $users,
             "metadata" => [
@@ -56,7 +57,7 @@ class UserController extends ResourceController
         $user = $users[0];
 
         $data = [
-            "status"   => 200,
+            "status"   => "ok",
             "message"  => "data detail  forum mahasiswa jurusan manajemen informatika",
             "data"     => $user
         ];
@@ -77,10 +78,12 @@ class UserController extends ResourceController
         $user = $this->UserModel->where('username', $username)->orWhere('email', $email)->first();
         if ($user != null && $username === $user->username) {
             return $this->respond([
+                "status"  => "conflict",
                 "message" => "username ". $username .  " sudah digunakan"
             ], 302);
         } elseif ($user != null && $email === $user->email) {
             return $this->respond([
+                "status"  => "conflict",
                 "message" => $email .  " sudah terdaftar"
             ], 302);
         }
@@ -105,7 +108,8 @@ class UserController extends ResourceController
         $this->ProfileModel->insert($profile);
 
         return $this->respondCreated([
-            "message" => "berhasih menambahkan data user"
+            "status"  => "ok",
+            "message" => "berhasil menambahkan data user"
         ]);
     }
 
@@ -123,10 +127,12 @@ class UserController extends ResourceController
 
         if ($username === $user->username) {
             return $this->respond([
+                "status"  => "conflict",
                 "message" => "username: ". $username ."sudah digunakan"
             ], 302);
         } elseif ($email === $user->email) {
             return $this->respond([
+                "status"  => "conflict",
                 "message" => "email: " . $email . " sudah digunakan"
             ], 302);
         }
@@ -151,6 +157,7 @@ class UserController extends ResourceController
         $this->ProfileModel->update($user->id, $profile);
 
         return $this->respond([
+            "status"  => "ok",
             "message" => "data ". $user->username . " berhasil diupdate" 
         ], 201);
     }
@@ -164,7 +171,7 @@ class UserController extends ResourceController
                 "message" => [
                     "error" => "hapus data gagal, user tidak ditemukan"
                 ]
-            ]);
+            ], 404);
         }
 
         $this->UserModel->delete($id);
