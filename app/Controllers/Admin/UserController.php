@@ -128,7 +128,7 @@ class UserController extends ResourceController
         if ($username === $user->username) {
             return $this->respond([
                 "status"  => "conflict",
-                "message" => "username: ". $username ."sudah digunakan"
+                "message" => "username: ". $username ." sudah digunakan"
             ], 302);
         } elseif ($email === $user->email) {
             return $this->respond([
@@ -137,7 +137,7 @@ class UserController extends ResourceController
             ], 302);
         }
 
-        $hash = password_hash($password, PASSWORD_DEFAULT);
+        $hash = password_hash($password, PASSWORD_BCRYPT);
 
         $data = [
             "username" => (string) $username != null ? $username : $user->username,

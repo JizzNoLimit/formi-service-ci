@@ -71,4 +71,8 @@ class AuthController extends ResourceController
         ];
         return $this->respond($data, 200);
     }
+
+    public function Register() {
+        # code...
+    }
 }
