@@ -117,6 +117,13 @@ class UserController extends ResourceController
         # Edit user by id
         $user = $this->ProfileModel->getUserId($id)[0];
 
+        if (!$user || !$id) {
+            return $this->respond([
+                "status"  => "not found",
+                "message" => "data tidak ditemukan"
+            ], 404);
+        }
+
         $username = $this->Request->getVar('username');
         $email = $this->Request->getVar('email');
         $password = $this->Request->getVar('password');

@@ -39,6 +39,7 @@ $routes->group('api/v1', function($routes) {
     });
     $routes->group('auth', function($routes) {
         $routes->post('login', 'AuthController::login');
+        $routes->post('register', 'AuthController::register');
     });
     $routes->post('users', 'UserController::createUser');
 });
