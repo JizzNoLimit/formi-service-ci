@@ -36,6 +36,7 @@ $routes->group('api/v1', function($routes) {
         $routes->post('users', 'Admin\UserController::tambahUser');
         $routes->put('users/(:segment)', 'Admin\UserController::editUser/$1');
         $routes->delete('users/(:segment)', 'Admin\UserController::hapusUser/$1');
+        $routes->post('users/verification/(:segment)', 'Admin\UserController::verification/$1');
     });
     $routes->group('auth', function($routes) {
         $routes->post('login', 'AuthController::login');

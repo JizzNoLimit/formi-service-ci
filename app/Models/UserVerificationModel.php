@@ -9,7 +9,7 @@ class UserVerificationModel extends Model
     protected $table            = 'users_verifications';
     protected $useAutoIncrement = true;
     protected $returnType       = 'object';
-    protected $allowedFields    = ['id', 'username', 'email', 'password', 'role', 'nim', 'first_name', 'last_name', 'tgl_lahir', 'created_at', 'updated_at'];
+    protected $allowedFields    = ['id', 'username', 'email', 'password', 'role', 'nim', 'first_name', 'last_name', 'status', 'tgl_lahir', 'created_at', 'updated_at'];
 
     // Dates
     protected $useTimestamps = true;

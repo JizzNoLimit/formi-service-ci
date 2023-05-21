@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Models\ProfileModel;
 use App\Models\UsersModel;
+use App\Models\UserVerificationModel;
 use CodeIgniter\RESTful\ResourceController;
 
 class UserController extends ResourceController
@@ -188,5 +189,59 @@ class UserController extends ResourceController
             "message" => "hapus data user berhasil",
             "data"    => $user
         ]);
+    }
+
+    public function verification($id) {
+        $userVerification = new UserVerificationModel();
+
+        $userVerif = $userVerification->find($id);
+
+        if (!$userVerification || !$id) {
+            return $this->respond([
+                "status"  => "not found",
+                "message" => "data tidak ditemukan"
+            ], 404);
+        }
+
+        $user = $this->UserModel->where('username', $userVerif->username)->orWhere('email', $userVerif->email)->first();
+
+        if ($userVerif->username === $user->username) {
+            return $this->respond([
+                "status"  => "conflict",
+                "message" => "username: " . $userVerif->username . " sudah digunakan"
+            ], 302);
+        } elseif ($userVerif->email === $user->email) {
+            return $this->respond([
+                "status"  => "conflict",
+                "message" => "email: " . $userVerif->email . " sudah digunakan"
+            ], 302);
+        }
+
+        $userVerification->update($id, ["status" => true]);
+
+        $data = [
+            "username" => (string) $userVerif->username,
+            "email"    => (string) $userVerif->email,
+            "password" => (string) $userVerif->password,
+            "role"     => (string) $userVerif->role,
+        ];
+        $this->UserModel->insert($data);
+
+        $userId = $this->UserModel->insertID();
+
+        $profile = [
+            "nim"        => (string) $userVerif->nim,
+            "first_name" => (string) $userVerif->first_name,
+            "last_name"  => (string) $userVerif->last_name,
+            "tgl_lahir"  => intval($userVerif->tgl_lahir),
+            "user_id"    => intval($userId)
+        ];
+
+        $this->ProfileModel->insert($profile);
+
+        return $this->respond([
+            "status"  => "ok",
+            "message" => "verifikasi data user berhasil",
+        ], 202);
     }
 }

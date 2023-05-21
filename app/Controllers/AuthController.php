@@ -25,7 +25,11 @@ class AuthController extends ResourceController
         $password = $this->Request->getVar('password');
 
         if (!$username && !$email) {
-            return $this->failNotFound();
+            return
+            $this->respond([
+                "status"  => "not found",
+                "message" => "data tidak ditemukan"
+            ], 404);
         }
 
         $user = $username ? $this->UserModel->where('username', $username)->first() : $this->UserModel->where('email', $email)->first();
