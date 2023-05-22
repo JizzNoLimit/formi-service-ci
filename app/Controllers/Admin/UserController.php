@@ -15,7 +15,7 @@ class UserController extends ResourceController
 
     public function __construct() {
         $this->Request = service("request");
-        $this->respons = service("response");
+        $this->response = service("response");
         $this->UserModel = new UsersModel();
         $this->ProfileModel = new ProfileModel();
     }
@@ -47,7 +47,6 @@ class UserController extends ResourceController
                 "offset"    => $offset,
                 "limit"     => $limit
             ],
-            "user"          => $this->response->user
         ];
         return $this->respond($data, 200);
     }

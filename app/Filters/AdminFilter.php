@@ -9,7 +9,7 @@ use Exception;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
-class AuthFilter implements FilterInterface
+class AdminFilter implements FilterInterface
 {
     public function before(RequestInterface $request, $arguments = null) {
         $request = service("request");
@@ -37,7 +37,12 @@ class AuthFilter implements FilterInterface
         try {
             // $decoded = JWT::decode($token, $key, array("HS256"));
             $decoded = JWT::decode($token, new Key($key, 'HS256'));
-            return $response->user = $decoded;
+            if ($decoded->role !== "admin") {
+                $response = service('response');
+                $response->setBody('Access denied');
+                $response->setStatusCode(401);
+                return $response;
+            }
         } catch (Exception $ex) {
             $response->setBody('Access denied');
             $response->setStatusCode(401);

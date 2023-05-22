@@ -24,7 +24,8 @@ class Filters extends BaseConfig
         'secureheaders' => SecureHeaders::class,
 
         'cors'          => CorsFilter::class, //register cors
-        'authFilter'    => \App\Filters\AuthFilter::class,
+        'adminFilter'    => \App\Filters\AdminFilter::class,
+        // 'accesFilter'    => \App\Filters\AccesFilter::class,
     ];
 
     /**
@@ -64,5 +65,7 @@ class Filters extends BaseConfig
      * Example:
      * 'isLoggedIn' => ['before' => ['account/*', 'profiles/*']]
      */
-    public array $filters = [];
+    public array $filters = [
+        'adminFilter' => ['before' => ['api/v1/admin/*'], 'after' => ['']],
+    ];
 }
