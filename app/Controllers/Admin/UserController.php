@@ -15,6 +15,7 @@ class UserController extends ResourceController
 
     public function __construct() {
         $this->Request = service("request");
+        $this->respons = service("response");
         $this->UserModel = new UsersModel();
         $this->ProfileModel = new ProfileModel();
     }
@@ -45,7 +46,8 @@ class UserController extends ResourceController
                 "totalPage" => $totalPage,
                 "offset"    => $offset,
                 "limit"     => $limit
-            ]
+            ],
+            "user"          => $this->response->user
         ];
         return $this->respond($data, 200);
     }
@@ -205,12 +207,12 @@ class UserController extends ResourceController
 
         $user = $this->UserModel->where('username', $userVerif->username)->orWhere('email', $userVerif->email)->first();
 
-        if ($userVerif->username === $user->username) {
+        if ($userVerif->username === $user?->username) {
             return $this->respond([
                 "status"  => "conflict",
                 "message" => "username: " . $userVerif->username . " sudah digunakan"
             ], 302);
-        } elseif ($userVerif->email === $user->email) {
+        } elseif ($userVerif->email === $user?->email) {
             return $this->respond([
                 "status"  => "conflict",
                 "message" => "email: " . $userVerif->email . " sudah digunakan"
@@ -242,6 +244,7 @@ class UserController extends ResourceController
         return $this->respond([
             "status"  => "ok",
             "message" => "verifikasi data user berhasil",
+            "data"    => $user?->username
         ], 202);
     }
 }
