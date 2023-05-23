@@ -11,6 +11,20 @@ class UsersModel extends Model
     protected $returnType       = 'object';
     protected $allowedFields    = ['id', 'username', 'email', 'role', 'password'];
 
+    protected $validationRules = [
+        'username' => 'required',
+        'email'    => 'required|valid_email'
+    ];
+
+    protected $validationMessages = [
+        'username' => [
+            'required' => 'Silahkan masukan username'
+        ],
+        'email'    => [
+            'required'    => 'Silahkan masukan email',
+            'valid_email' => 'Email tidak valid'
+        ]
+    ];
     function totalData($search) {
         # code...
         $builder = $this->db->table('users');

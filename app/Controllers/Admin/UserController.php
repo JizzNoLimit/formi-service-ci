@@ -5,10 +5,12 @@ namespace App\Controllers\Admin;
 use App\Models\ProfileModel;
 use App\Models\UsersModel;
 use App\Models\UserVerificationModel;
+use CodeIgniter\API\ResponseTrait;
 use CodeIgniter\RESTful\ResourceController;
 
 class UserController extends ResourceController
 {
+    use ResponseTrait;
     protected $Request;
     protected $UserModel;
     protected $ProfileModel;
@@ -96,7 +98,12 @@ class UserController extends ResourceController
             "password" => password_hash($password, PASSWORD_DEFAULT),
             "role"     => (string) $role,
         ];
+
         $this->UserModel->insert($data);
+
+        if (!$this->UserModel->insert($data)) {
+            return $this->fail($this->UserModel->errors());
+        }
 
         $userId = $this->UserModel->insertID();
 
@@ -109,10 +116,10 @@ class UserController extends ResourceController
 
         $this->ProfileModel->insert($profile);
 
-        return $this->respondCreated([
+        return $this->respond([
             "status"  => "ok",
             "message" => "berhasil menambahkan data user"
-        ]);
+        ], 201);
     }
 
     public function editUser($id) {
@@ -156,6 +163,10 @@ class UserController extends ResourceController
         ];
 
         $this->UserModel->update($id, $data);
+
+        if (!$this->UserModel->update($data)) {
+            return $this->fail($this->UserModel->errors());
+        }
 
         $profile = [
             "nim"        => (string) $nim != null ? $nim : $user->nim,
