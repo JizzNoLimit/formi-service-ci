@@ -68,7 +68,7 @@ class Profiles extends Migration
             ]
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->addForeignKey('user_id', 'users', 'id', 'NO ACTION', 'CASCADE', 'fk_users_id');
+        $this->forge->addForeignKey('user_id', 'users', 'id', 'NO ACTION', 'CASCADE', 'fk_users_id_profile');
         $this->forge->createTable('profile');
     }
 
