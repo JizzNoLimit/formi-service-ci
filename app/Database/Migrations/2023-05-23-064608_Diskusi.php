@@ -27,7 +27,8 @@ class Diskusi extends Migration
             'slug' => [
                 'type'       => 'VARCHAR',
                 'constraint' => '150',
-                'null'       => false
+                'null'       => false,
+                'unique'     => true
             ],
             'user_id' => [
                 'type'       => 'BIGINT',
