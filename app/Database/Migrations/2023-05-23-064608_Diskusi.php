@@ -43,7 +43,7 @@ class Diskusi extends Migration
 
     public function down()
     {
-        $this->forge->dropForeignKey('profile', 'fk_users_id_diskusi');
+        $this->forge->dropForeignKey('diskusi', 'fk_users_id_diskusi');
         $this->forge->dropTable('diskusi');
     }
 }
