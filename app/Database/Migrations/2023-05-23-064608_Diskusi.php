@@ -30,6 +30,11 @@ class Diskusi extends Migration
                 'null'       => false,
                 'unique'     => true
             ],
+            'img' => [
+                'type'       => 'VARCHAR',
+                'constraint' => '150',
+                'null'       => true,
+            ],
             'user_id' => [
                 'type'       => 'BIGINT',
                 'constraint' => 10,
