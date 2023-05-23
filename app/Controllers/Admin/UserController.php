@@ -99,8 +99,6 @@ class UserController extends ResourceController
             "role"     => (string) $role,
         ];
 
-        $this->UserModel->insert($data);
-
         if (!$this->UserModel->insert($data)) {
             return $this->fail($this->UserModel->errors());
         }

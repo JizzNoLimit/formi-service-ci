@@ -2,77 +2,56 @@
 
 namespace App\Controllers;
 
+use App\Models\DiskusiModel;
+use CodeIgniter\API\ResponseTrait;
 use CodeIgniter\RESTful\ResourceController;
 
 class DiskusiController extends ResourceController
 {
-    /**
-     * Return an array of resource objects, themselves in array format
-     *
-     * @return mixed
-     */
-    public function index()
-    {
-        //
+    use ResponseTrait;
+    protected $request;
+    protected $DiskusiModel;
+
+    public function __construct() {
+        $this->request = service("request");
+        $this->DiskusiModel = new DiskusiModel();
     }
 
-    /**
-     * Return the properties of a resource object
-     *
-     * @return mixed
-     */
-    public function show($id = null)
-    {
-        //
-    }
+    public function tambahDiskusi() {
+        $user_id = $this->request->getVar('user_id');
+        $title = $this->request->getVar('title');
+        $desk = $this->request->getVar('desk');
+        $img = $this->request->getFile('img');
+        
+        $slug = substr(url_title($title ? $title : "", '-', true), 0, 80);
 
-    /**
-     * Return a new resource object, with default properties
-     *
-     * @return mixed
-     */
-    public function new()
-    {
-        //
-    }
+        $img_name = null;
 
-    /**
-     * Create a new resource object, from "posted" parameters
-     *
-     * @return mixed
-     */
-    public function create()
-    {
-        //
-    }
+        $validated = $this->validate([
+            'img'  => [
+                'uploaded[img]',
+                'mime_in[img,image/jpg,image/jpeg,image/gif,image/png]',
+                'max_size[img,2096]',
+            ]
+        ]);
 
-    /**
-     * Return the editable properties of a resource object
-     *
-     * @return mixed
-     */
-    public function edit($id = null)
-    {
-        //
-    }
+        if ($validated) {
+            $img_name = $img->getRandomName();
+            $img->move('uploads/diskusi', $img_name);
+        }
+        
+        $data = [
+            "title"   => $title,
+            "desk"    => $desk,
+            "img"     => $img_name,
+            "slug"    => (string) $slug,
+            "user_id" => $user_id
+        ];
 
-    /**
-     * Add or update a model resource, from "posted" properties
-     *
-     * @return mixed
-     */
-    public function update($id = null)
-    {
-        //
-    }
+        if (!$this->DiskusiModel->save($data)) {
+            return $this->fail($this->DiskusiModel->errors());
+        }
 
-    /**
-     * Delete the designated resource object from the model
-     *
-     * @return mixed
-     */
-    public function delete($id = null)
-    {
-        //
+        return $this->respond($data, 200);
     }
 }

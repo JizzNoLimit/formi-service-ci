@@ -18,4 +18,18 @@ class DiskusiModel extends Model
     protected $dateFormat    = 'int';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
+
+    protected $validationRules = [
+        'title' => 'required',
+        'desk'  => 'required'
+    ];
+
+    protected $validationMessages = [
+        'title' => [
+            'required'    => 'Judul tidak boleh kosong'
+        ],
+        'desk'    => [
+            'required'    => 'Isi diskusi tidak boleh kosong'
+        ]
+    ];
 }

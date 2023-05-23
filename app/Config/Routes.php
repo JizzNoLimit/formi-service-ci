@@ -42,6 +42,9 @@ $routes->group('api/v1', function($routes) {
         $routes->post('login', 'AuthController::login');
         $routes->post('register', 'AuthController::register');
     });
+    $routes->group('forums', function ($routes) {
+        $routes->post('/', 'DiskusiController::tambahDiskusi');
+    });
     $routes->post('users', 'UserController::createUser');
 });
 
