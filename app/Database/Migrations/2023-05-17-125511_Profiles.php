@@ -74,7 +74,7 @@ class Profiles extends Migration
 
     public function down()
     {
-        $this->forge->dropForeignKey('profile', 'fk_users_id');
+        $this->forge->dropForeignKey('profile', 'fk_users_id_profile');
         $this->forge->dropTable('profile');
     }
 }
