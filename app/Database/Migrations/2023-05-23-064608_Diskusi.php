@@ -35,7 +35,7 @@ class Diskusi extends Migration
                 'constraint' => '150',
                 'null'       => true,
             ],
-            'total_koment' => [
+            'pengunjung' => [
                 'type'       => 'INT',
                 'unsigned'   => true,
                 'default'    => 0
