@@ -10,7 +10,7 @@ class DiskusiModel extends Model
     protected $useAutoIncrement = true;
     protected $returnType       = 'object';
     protected $allowedFields    = [
-        'id', 'title', 'slug', 'desk', 'user_id', 'created_at', 'updated_at'
+        'id', 'title', 'slug', 'desk', 'total_koment', 'user_id', 'created_at', 'updated_at'
     ];
 
     // Dates

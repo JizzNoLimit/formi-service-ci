@@ -35,6 +35,11 @@ class Diskusi extends Migration
                 'constraint' => '150',
                 'null'       => true,
             ],
+            'total_koment' => [
+                'type'       => 'INT',
+                'unsigned'   => true,
+                'default'    => 0
+            ],
             'user_id' => [
                 'type'       => 'BIGINT',
                 'constraint' => 10,
