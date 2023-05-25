@@ -29,24 +29,23 @@ $routes->set404Override();
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->group('api/v1', function($routes) {
-    $routes->group('admin', function ($routes) {
-        $routes->get('users', 'Admin\UserController::tampilUsers');
-        $routes->get('users/(:segment)', 'Admin\UserController::tampilUsersId/$1');
-        $routes->post('users', 'Admin\UserController::tambahUser');
-        $routes->put('users/(:segment)', 'Admin\UserController::editUser/$1');
-        $routes->delete('users/(:segment)', 'Admin\UserController::hapusUser/$1');
-        $routes->post('users/verifikasi/(:segment)', 'Admin\UserController::verification/$1');
-    });
-    $routes->group('auth', function($routes) {
-        $routes->post('login', 'AuthController::login');
-        $routes->post('register', 'AuthController::register');
-    });
-    $routes->group('forums', function ($routes) {
-        $routes->post('/', 'DiskusiController::tambahDiskusi');
-    });
-    $routes->post('users', 'UserController::createUser');
+$routes->group('admin', function ($routes) {
+    $routes->get('users', 'Admin\UserController::tampilUsers');
+    $routes->get('users/(:segment)', 'Admin\UserController::tampilUsersId/$1');
+    $routes->post('users', 'Admin\UserController::tambahUser');
+    $routes->put('users/(:segment)', 'Admin\UserController::editUser/$1');
+    $routes->delete('users/(:segment)', 'Admin\UserController::hapusUser/$1');
+    $routes->post('users/verifikasi/(:segment)', 'Admin\UserController::verification/$1');
 });
+$routes->group('auth', function($routes) {
+    $routes->post('login', 'AuthController::login');
+    $routes->post('register', 'AuthController::register');
+});
+$routes->group('forums', function ($routes) {
+    $routes->get('/', 'DiskusiController::tampilDiskusi');
+    $routes->post('/', 'DiskusiController::tambahDiskusi');
+});
+$routes->post('users', 'UserController::createUser');
 
 /*
  * --------------------------------------------------------------------

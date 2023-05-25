@@ -24,7 +24,7 @@ class UserController extends ResourceController
 
     public function tampilUsers() {
         // Show users
-        $search = (string) $this->Request->getGet('search_query');
+        $search = (string) $this->Request->getGet('q');
         $page = intval($this->Request->getGet('page'));
         $limit = intval($this->Request->getGet('limit') != null ? $this->Request->getGet('limit') : 10);
         
