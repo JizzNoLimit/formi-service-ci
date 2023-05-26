@@ -18,19 +18,19 @@ class DiskusiController extends ResourceController
     }
 
     public function tampilDiskusi() {
-        $search = (string) $this->request->getGet('q');
-        $tab = (string) $this->request->getGet('tab') ? $this->request->getGet('tab') : "populer";
-        $page = intval($this->request->getGet('page') ? $this->Request->getGet('page') : 1);
-        $limit = intval($this->request->getGet('limit') ? $this->Request->getGet('limit') : 10);
+        $tab = (string) $this->request->getGet('tab');
+        $page = intval($this->request->getGet('page'));
+        $limit = intval($this->request->getGet('limit'));
+        $limit = $limit == 0 ? 10 : $limit;
 
-        if ($page == 1) { $page = 0; }
+        if ($page == 0) { $page = 1; }
  
-        $offset = $limit * $page;
-
-        $totalRows = $this->DiskusiModel->like('title', $search)->countAllResults();
+        $offset = $limit * ($page - 1);
+        $totalRows = $this->DiskusiModel->countAllResults();
         $totalPage = ceil($totalRows / $limit);
 
-        $data = $this->DiskusiModel->findAll();
+        $data = $this-> DiskusiModel->getDiskusi($offset, $limit);
+        $totalPage = $data == null ? 0 : $totalPage;
 
         $data = [
             "status"   => "ok",
