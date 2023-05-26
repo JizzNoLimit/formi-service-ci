@@ -26,11 +26,11 @@ class UserController extends ResourceController
         // Show users
         $search = (string) $this->Request->getGet('q');
         $page = intval($this->Request->getGet('page'));
-        $limit = intval($this->Request->getGet('limit') != null ? $this->Request->getGet('limit') : 10);
+        $limit = intval($this->Request->getGet('limit'));
         
-        if ($page == 1) { $page = 0; }
+        if ($page == 0) { $page = 1; }
 
-        $offset = $limit * $page;
+        $offset = $limit * $page - 1;
 
         $totalRows = $this->ProfileModel->totalData($search);
         $totalPage = ceil($totalRows / $limit);
