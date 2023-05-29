@@ -74,6 +74,7 @@ class UserController extends ResourceController
         $email = $this->Request->getVar('email');
         $password = $this->Request->getVar('password');
         $role = $this->Request->getVar('role');
+        $role = $role ? $role : "mahasiswa";
 
         $nim = $this->Request->getVar('nim');
         $first_name = $this->Request->getVar('first_name');

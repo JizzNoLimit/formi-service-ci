@@ -18,7 +18,6 @@ class DiskusiController extends ResourceController
     }
 
     public function tampilDiskusi() {
-        $tab = (string) $this->request->getGet('tab');
         $page = intval($this->request->getGet('page'));
         $limit = intval($this->request->getGet('limit'));
         $limit = $limit == 0 ? 10 : $limit;
@@ -29,13 +28,13 @@ class DiskusiController extends ResourceController
         $totalRows = $this->DiskusiModel->countAllResults();
         $totalPage = ceil($totalRows / $limit);
 
-        $data = $this-> DiskusiModel->getDiskusi($offset, $limit);
-        $totalPage = $data == null ? 0 : $totalPage;
+        $diskusi = $this-> DiskusiModel->getDiskusi($offset, $limit);
+        $totalPage = $diskusi == null ? 0 : $totalPage;
 
         $data = [
             "status"   => "ok",
             "message"  => "user forum mahasiswa jurusan manajemen informatika",
-            "data"     => $data,
+            "data"     => $diskusi,
             "metadata" => [
                 "page"      => $page == 0 ? 1 : $page,
                 "totalRows" => $totalRows,
@@ -87,5 +86,18 @@ class DiskusiController extends ResourceController
             "status"  => "ok",
             "message" => "berhasil membuat diskusi"
         ], 201);
+    }
+
+    function editDiskusi($id) {
+        $user_id = $this->request->getVar('user_id');
+
+        $diskusi = $this->DiskusiModel->find($id);
+
+        if ($user_id !== $diskusi->user_id) {
+            return $this->respond([
+                "status"  => "error",
+                "message" => "akses tidak diizinkan!!"
+            ], 401);
+        }
     }
 }
