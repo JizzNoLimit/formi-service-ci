@@ -30,7 +30,9 @@ class UserController extends ResourceController
         
         if ($page == 0) { $page = 1; }
 
-        $offset = $limit * $page - 1;
+        $limit = $limit != 0 ? $limit : 10;  
+
+        $offset = $limit * ($page - 1);
 
         $totalRows = $this->ProfileModel->totalData($search);
         $totalPage = ceil($totalRows / $limit);
