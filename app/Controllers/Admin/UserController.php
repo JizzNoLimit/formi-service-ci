@@ -41,7 +41,7 @@ class UserController extends ResourceController
         if ($users === []) { $totalPage = 0; }
 
         $data = [
-            "status"   => "ok",
+            "status"   => true,
             "message"  => "user forum mahasiswa jurusan manajemen informatika",
             "data"     => $users,
             "metadata" => [
@@ -63,7 +63,7 @@ class UserController extends ResourceController
         $user = $users[0];
 
         $data = [
-            "status"   => "ok",
+            "status"   => true,
             "message"  => "data detail  forum mahasiswa jurusan manajemen informatika",
             "data"     => $user
         ];
@@ -85,12 +85,12 @@ class UserController extends ResourceController
         $user = $this->UserModel->where('username', $username)->orWhere('email', $email)->first();
         if ($user != null && $username === $user->username) {
             return $this->respond([
-                "status"  => "conflict",
+                "status"  => false,
                 "message" => "username ". $username .  " sudah digunakan"
             ], 302);
         } elseif ($user != null && $email === $user->email) {
             return $this->respond([
-                "status"  => "conflict",
+                "status"  => false,
                 "message" => $email .  " sudah terdaftar"
             ], 302);
         }
@@ -118,7 +118,7 @@ class UserController extends ResourceController
         $this->ProfileModel->insert($profile);
 
         return $this->respond([
-            "status"  => "ok",
+            "status"  => true,
             "message" => "berhasil menambahkan data user"
         ], 201);
     }
@@ -129,7 +129,7 @@ class UserController extends ResourceController
 
         if (!$user || !$id) {
             return $this->respond([
-                "status"  => "not found",
+                "status"  => false,
                 "message" => "data tidak ditemukan"
             ], 404);
         }
@@ -144,12 +144,12 @@ class UserController extends ResourceController
 
         if ($username === $user->username) {
             return $this->respond([
-                "status"  => "conflict",
+                "status"  => false,
                 "message" => "username: ". $username ." sudah digunakan"
             ], 302);
         } elseif ($email === $user->email) {
             return $this->respond([
-                "status"  => "conflict",
+                "status"  => false,
                 "message" => "email: " . $email . " sudah digunakan"
             ], 302);
         }
@@ -178,7 +178,7 @@ class UserController extends ResourceController
         $this->ProfileModel->update($user->id, $profile);
 
         return $this->respond([
-            "status"  => "ok",
+            "status"  => true,
             "message" => "data ". $user->username . " berhasil diupdate" 
         ], 201);
     }
@@ -188,17 +188,15 @@ class UserController extends ResourceController
 
         if ($user == null) {
             return $this->respond([
-                "status"  => "error",
-                "message" => [
-                    "error" => "hapus data gagal, user tidak ditemukan"
-                ]
+                "status"  => false,
+                "message" => "hapus data gagal, user tidak ditemukan"
             ], 404);
         }
 
         $this->UserModel->delete($id);
 
         return $this->respond([
-            "status"  => "ok",
+            "status"  => true,
             "message" => "hapus data user berhasil",
             "data"    => $user
         ]);
@@ -211,7 +209,7 @@ class UserController extends ResourceController
 
         if (!$userVerification || !$id) {
             return $this->respond([
-                "status"  => "not found",
+                "status"  => false,
                 "message" => "data tidak ditemukan"
             ], 404);
         }
@@ -220,12 +218,12 @@ class UserController extends ResourceController
 
         if ($userVerif->username === $user?->username) {
             return $this->respond([
-                "status"  => "conflict",
+                "status"  => false,
                 "message" => "username: " . $userVerif->username . " sudah digunakan"
             ], 302);
         } elseif ($userVerif->email === $user?->email) {
             return $this->respond([
-                "status"  => "conflict",
+                "status"  => false,
                 "message" => "email: " . $userVerif->email . " sudah digunakan"
             ], 302);
         }
@@ -253,7 +251,7 @@ class UserController extends ResourceController
         $this->ProfileModel->insert($profile);
 
         return $this->respond([
-            "status"  => "ok",
+            "status"  => true,
             "message" => "verifikasi data user berhasil",
             "data"    => $user?->username
         ], 202);

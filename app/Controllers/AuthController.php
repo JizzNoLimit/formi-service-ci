@@ -27,18 +27,16 @@ class AuthController extends ResourceController
         if (!$username && !$email) {
             return
             $this->respond([
-                "status"  => "not found",
-                "message" => "data tidak ditemukan"
+                "status"  => false,
+                "message" => "data tidak ditemukan, mohon masukan data dengan benar!"
             ], 404);
         }
 
         $user = $username ? $this->UserModel->where('username', $username)->first() : $this->UserModel->where('email', $email)->first();
         if ($user == null) {
             return $this->respond([
-                "status"   => "error",
-                "message"  => [
-                    "error"  => $username ? "username tidak ditemukan" : "email tidak ditemukan"
-                ]
+                "status"   => false,
+                "message"  => $username ? "username tidak ditemukan" : "email tidak ditemukan"
             ], 404);
         }
 
@@ -46,9 +44,7 @@ class AuthController extends ResourceController
         if (!$match) {
             return $this->respond([
                 "status"   => "error",
-                "message"  => [
-                    "error"  => "password salah"
-                ]
+                "message"  => "password salah"
             ], 401);
         }
 

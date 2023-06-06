@@ -32,7 +32,7 @@ class DiskusiController extends ResourceController
         $totalPage = $diskusi == null ? 0 : $totalPage;
 
         $data = [
-            "status"   => "ok",
+            "status"   => true,
             "message"  => "user forum mahasiswa jurusan manajemen informatika",
             "data"     => $diskusi,
             "metadata" => [
@@ -83,7 +83,7 @@ class DiskusiController extends ResourceController
         }
 
         return $this->respond([
-            "status"  => "ok",
+            "status"  => true,
             "message" => "berhasil membuat diskusi"
         ], 201);
     }
@@ -95,7 +95,7 @@ class DiskusiController extends ResourceController
 
         if ($user_id !== $diskusi->user_id) {
             return $this->respond([
-                "status"  => "error",
+                "status"  => false,
                 "message" => "akses tidak diizinkan!!"
             ], 401);
         }
