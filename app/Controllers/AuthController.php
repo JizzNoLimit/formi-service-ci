@@ -43,7 +43,7 @@ class AuthController extends ResourceController
         $match = password_verify($password, $user->password);
         if (!$match) {
             return $this->respond([
-                "status"   => "error",
+                "status"   => false,
                 "message"  => "password salah"
             ], 401);
         }
@@ -60,7 +60,7 @@ class AuthController extends ResourceController
         $token = JWT::encode($payload, $jwt_secret, 'HS256', '7d');
 
         $data = [
-            "status"   => "ok",
+            "status"   => true,
             "message"  => "login berhasil",
             "data"     => [
                 "id"       => $user->id,
@@ -87,7 +87,7 @@ class AuthController extends ResourceController
 
         if (!$username || !$email || !$password || !$nim) {
             return $this->respond([
-                "status"  => "error",
+                "status"  => false,
                 "message" => "data tidak lengkap untuk registrasi"
             ], 404);
         }
@@ -96,12 +96,12 @@ class AuthController extends ResourceController
 
         if ($username === $user?->username) {
             return $this->respond([
-                "status"  => "conflict",
+                "status"  => false,
                 "message" => "username: " . $username . " sudah digunakan"
             ], 302);
         } elseif ($email === $user?->email) {
             return $this->respond([
-                "status"  => "conflict",
+                "status"  => false,
                 "message" => "email: " . $email . " sudah digunakan"
             ], 302);
         }
@@ -121,7 +121,7 @@ class AuthController extends ResourceController
         $userVerification->insert($data);
 
         return $this->respond([
-            "status"  => "ok",
+            "status"  => true,
             "message" => "Registrasi berhasil",
         ], 201);
     }
