@@ -67,8 +67,8 @@ class AuthController extends ResourceController
                 "username" => $user->username,
                 "email"    => $user->email,
                 "role"     => $user->role,
-                "token"    => $token
-            ]
+            ],
+            "token"    => $token
         ];
         return $this->respond($data, 200);
     }

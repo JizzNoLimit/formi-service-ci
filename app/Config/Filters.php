@@ -2,13 +2,12 @@
 
 namespace Config;
 
-use App\Filters\CorsFilter;
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Filters\CSRF;
 use CodeIgniter\Filters\DebugToolbar;
 use CodeIgniter\Filters\Honeypot;
-use CodeIgniter\Filters\InvalidChars;
-use CodeIgniter\Filters\SecureHeaders;
+// use CodeIgniter\Filters\InvalidChars;
+// use CodeIgniter\Filters\SecureHeaders;
 
 class Filters extends BaseConfig
 {
@@ -20,10 +19,8 @@ class Filters extends BaseConfig
         'csrf'          => CSRF::class,
         'toolbar'       => DebugToolbar::class,
         'honeypot'      => Honeypot::class,
-        'invalidchars'  => InvalidChars::class,
-        'secureheaders' => SecureHeaders::class,
 
-        'cors'          => CorsFilter::class, //register cors
+        'options'        => \App\Filters\CorsFilter::class,
         'adminFilter'    => \App\Filters\AdminFilter::class,
         // 'accesFilter'    => \App\Filters\AccesFilter::class,
     ];
@@ -34,9 +31,7 @@ class Filters extends BaseConfig
      */
     public array $globals = [
         'before' => [
-            // 'honeypot',
-            // 'csrf',
-            // 'invalidchars',
+            'options'
         ],
         'after' => [
             'toolbar',
