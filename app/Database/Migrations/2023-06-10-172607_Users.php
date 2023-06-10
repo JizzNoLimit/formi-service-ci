@@ -49,7 +49,7 @@ class Users extends Migration
 
     public function down()
     {
-        $this->forge->dropForeignKey('profile', 'fk_profile_id_users');
+        $this->forge->dropForeignKey('users', 'fk_profile_id_users');
         $this->forge->dropTable('users');
     }
 }
