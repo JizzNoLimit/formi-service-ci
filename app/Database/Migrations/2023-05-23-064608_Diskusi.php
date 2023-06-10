@@ -35,10 +35,9 @@ class Diskusi extends Migration
                 'constraint' => '150',
                 'null'       => true,
             ],
-            'views' => [
-                'type'       => 'INT',
-                'unsigned'   => true,
-                'default'    => 0
+            'terjawab' => [
+                'type'       => 'BOOLEAN',
+                'default'    => false
             ],
             'user_id' => [
                 'type'       => 'BIGINT',
