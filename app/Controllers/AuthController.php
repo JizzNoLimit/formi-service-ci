@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use CodeIgniter\RESTful\ResourceController;
-use App\Models\ProfileModel;
 use App\Models\UsersModel;
 use App\Models\UserVerificationModel;
 use Firebase\JWT\JWT;
@@ -112,9 +111,10 @@ class AuthController extends ResourceController
             "username"      => (string) $username,
             "email"         => (string) $email,
             "password"      => (string) $hash,
-            "nim"           => (string) $nim,
-            "first_name"    => (string) $first_name,
-            "last_name"     => (string) $last_name,
+            "role"          => $role,
+            "nim"           => $nim,
+            "first_name"    => $first_name,
+            "last_name"     => $last_name,
             "tgl_lahir"     => intval($tgl_lahir),
         ];
 

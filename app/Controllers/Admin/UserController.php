@@ -34,11 +34,11 @@ class UserController extends ResourceController
 
         $offset = $limit * ($page - 1);
 
-        $totalRows = $this->ProfileModel->totalData($search);
+        $totalRows = $this->UserModel->totalData($search);
         $totalPage = ceil($totalRows / $limit);
 
-        $users = $this->ProfileModel->getUser($search, $offset, $limit);
-        if ($users === []) { $totalPage = 0; }
+        $users = $this->UserModel->getUser($search, $offset, $limit);
+        if (!$users) { $totalPage = 0; }
 
         $data = [
             "status"   => true,
@@ -95,27 +95,27 @@ class UserController extends ResourceController
             ], 302);
         }
 
+        $profile = [
+            "nim"        => (string) $nim,
+            "first_name" => (string) $first_name,
+            "last_name"  => (string) $last_name,
+        ];
+
+        $this->ProfileModel->insert($profile);
+
+        $profileId = $this->ProfileModel->insertID();
+        
         $data = [
-            "username" => (string) $username,
-            "email"    => (string) $email,
-            "password" => password_hash($password, PASSWORD_DEFAULT),
-            "role"     => (string) $role,
+            "username"   => (string) $username,
+            "email"      => (string) $email,
+            "password"   => password_hash($password, PASSWORD_BCRYPT),
+            "role"       => (string) $role,
+            "profile_id" => intval($profileId)
         ];
 
         if (!$this->UserModel->insert($data)) {
             return $this->fail($this->UserModel->errors());
         }
-
-        $userId = $this->UserModel->insertID();
-
-        $profile = [
-            "nim"        => (string) $nim,
-            "first_name" => (string) $first_name,
-            "last_name"  => (string) $last_name,
-            "user_id"    => intval($userId)
-        ];
-
-        $this->ProfileModel->insert($profile);
 
         return $this->respond([
             "status"  => true,
@@ -125,7 +125,7 @@ class UserController extends ResourceController
 
     public function editUser($id) {
         # Edit user by id
-        $user = $this->ProfileModel->getUserId($id)[0];
+        $user = $this->UserModel->getUserId($id)[0];
 
         if (!$user || !$id) {
             return $this->respond([
@@ -228,27 +228,29 @@ class UserController extends ResourceController
             ], 302);
         }
 
-        $userVerification->update($id, ["status" => true]);
-
-        $data = [
-            "username" => (string) $userVerif->username,
-            "email"    => (string) $userVerif->email,
-            "password" => (string) $userVerif->password,
-            "role"     => (string) $userVerif->role,
-        ];
-        $this->UserModel->insert($data);
-
-        $userId = $this->UserModel->insertID();
-
         $profile = [
             "nim"        => (string) $userVerif->nim,
             "first_name" => (string) $userVerif->first_name,
             "last_name"  => (string) $userVerif->last_name,
-            "tgl_lahir"  => intval($userVerif->tgl_lahir),
-            "user_id"    => intval($userId)
         ];
 
         $this->ProfileModel->insert($profile);
+
+        $profileId = $this->ProfileModel->insertID();
+
+        $data = [
+            "username"   => (string) $userVerif->username,
+            "email"      => (string) $userVerif->email,
+            "password"   => password_hash($userVerif->password, PASSWORD_BCRYPT),
+            "role"       => (string) $userVerif->role,
+            "profile_id" => intval($profileId)
+        ];
+
+        if (!$this->UserModel->insert($data)) {
+            return $this->fail($this->UserModel->errors());
+        }
+
+        $userVerification->update($id, ["status" => true]);
 
         return $this->respond([
             "status"  => true,

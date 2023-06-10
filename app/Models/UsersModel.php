@@ -25,10 +25,29 @@ class UsersModel extends Model
             'valid_email' => 'Email tidak valid'
         ]
     ];
-    function totalData($search) {
-        # code...
+
+    public function getUser($search, $offset, $limit) {
         $builder = $this->db->table('users');
-        $builder->like('username', $search)->orlike('email', $search);
+        $builder->select('users.id, username, email, role, profile_id, profile.nim, profile.first_name, profile.last_name, profile.tgl_lahir, profile.alamat, profile.bio, profile.foto, profile.created_at, profile.updated_at');
+        $builder->join('profile', 'profile.id = users.profile_id');
+        $builder->like('nim', $search)->orLike('username', $search)->orLike('email', $search);
+        $query = $builder->get($limit, $offset);
+        return $query->getResult();
+    }
+
+    public function getUserId($id) {
+        $builder = $this->db->table('users');
+        $builder->select('users.id, username, email, role, profile_id, profile.nim, profile.first_name, profile.last_name, profile.tgl_lahir, profile.alamat, profile.bio, profile.foto, profile.created_at, profile.updated_at');
+        $builder->join('profile', 'profile.id = users.profile_id');
+        $builder->where('users.id', $id);
+        $query = $builder->get();
+        return $query->getResult();
+    }
+
+    function totalData($search) {
+        $builder = $this->db->table('users');
+        $builder->join('profile', 'profile.id = users.profile_id');
+        $builder->like('nim', $search)->orLike('username', $search)->orLike('email', $search);
         $query = $builder->countAllResults();
         return $query;
     }
