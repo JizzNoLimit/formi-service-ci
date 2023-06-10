@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class Komentar extends Migration
+class Koment extends Migration
 {
     public function up()
     {
@@ -17,7 +17,7 @@ class Komentar extends Migration
             ],
             'konten' => [
                 'type'    => 'TEXT',
-                'null'    => false  
+                'null'    => false
             ],
             'user_id' => [
                 'type'       => 'BIGINT',

@@ -35,13 +35,21 @@ class Users extends Migration
                 'default'    => 'mahasiswa',
                 'null'       => false
             ],
+            'profile_id' => [
+                'type'          => 'BIGINT',
+                'constraint'    => 10,
+                'unsigned'      => true,
+                'null'          => true,
+            ],
         ]);
         $this->forge->addKey('id', true);
+        $this->forge->addForeignKey('profile_id', 'profile', 'id', 'CASCADE', 'CASCADE', 'fk_profile_id_users');
         $this->forge->createTable('users');
     }
 
     public function down()
     {
+        $this->forge->dropForeignKey('profile', 'fk_profile_id_users');
         $this->forge->dropTable('users');
     }
 }

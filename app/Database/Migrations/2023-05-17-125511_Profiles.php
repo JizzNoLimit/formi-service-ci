@@ -49,13 +49,6 @@ class Profiles extends Migration
                 'constraint' => '150',
                 'null'       => true
             ],
-            'user_id' => [
-                'type'          => 'BIGINT',
-                'constraint'    => 10,
-                'unsigned'      => true,
-                'null'          => true,
-                'unique'        => true
-            ],
             'created_at' => [
                 'type'      => 'BIGINT',
                 'unsigned'  => true,
@@ -68,13 +61,11 @@ class Profiles extends Migration
             ]
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->addForeignKey('user_id', 'users', 'id', 'NO ACTION', 'CASCADE', 'fk_users_id_profile');
         $this->forge->createTable('profile');
     }
 
     public function down()
     {
-        $this->forge->dropForeignKey('profile', 'fk_users_id_profile');
         $this->forge->dropTable('profile');
     }
 }
