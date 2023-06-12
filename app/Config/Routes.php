@@ -46,6 +46,7 @@ $routes->group('auth', function($routes) {
 });
 $routes->group('forums', function ($routes) {
     $routes->get('/', 'DiskusiController::tampilDiskusi');
+    $routes->get('(:segment)', 'DiskusiController::tampilDiskusiId/$1');
     $routes->post('/', 'DiskusiController::tambahDiskusi');
 });
 $routes->post('users', 'UserController::createUser');

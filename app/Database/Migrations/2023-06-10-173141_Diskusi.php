@@ -39,6 +39,11 @@ class Diskusi extends Migration
                 'type'       => 'BOOLEAN',
                 'default'    => false
             ],
+            'total_komentar' => [
+                'type'       => 'INT',
+                'unsigned'   => true,
+                'default'    => 0
+            ],
             'user_id' => [
                 'type'       => 'BIGINT',
                 'constraint' => 10,

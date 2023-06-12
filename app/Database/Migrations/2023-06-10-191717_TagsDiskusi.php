@@ -16,16 +16,15 @@ class TagsDiskusi extends Migration
                 'auto_increment' => true,
             ],
             'tags_id' => [
-                'type'          => 'BIGINT',
-                'constraint'    => 10,
-                'unsigned'      => true,
-                'null'          => true,
+                'type'       => 'VARCHAR',
+                'constraint' => '25',
+                'null'          => false,
             ],
             'diskusi_id' => [
                 'type'          => 'BIGINT',
                 'constraint'    => 10,
                 'unsigned'      => true,
-                'null'          => true,
+                'null'          => false,
             ],
         ]);
         $this->forge->addKey('id', true);

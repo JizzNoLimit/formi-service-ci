@@ -9,7 +9,7 @@ class UsersModel extends Model
     protected $table            = 'users';
     protected $useAutoIncrement = true;
     protected $returnType       = 'object';
-    protected $allowedFields    = ['id', 'username', 'email', 'role', 'password'];
+    protected $allowedFields    = ['id', 'username', 'email', 'role', 'password', 'profile_id'];
 
     protected $validationRules = [
         'username' => 'required',

@@ -37,11 +37,16 @@ class Koment extends Migration
                 'unsigned'   => true,
                 'null'       => true
             ],
-            'total' => [
-                'type'       => 'INT',
-                'unsigned'   => true,
-                'null'       => true
+            'created_at' => [
+                'type'      => 'BIGINT',
+                'unsigned'  => true,
+                'null'      => true
             ],
+            'updated_at' => [
+                'type'      => 'BIGINT',
+                'unsigned'  => true,
+                'null'      => true
+            ]
         ]);
         $this->forge->addKey('id', true);
         $this->forge->addForeignKey('user_id', 'users', 'id', 'NO ACTION', 'SET NULL', 'fk_users_id_koment');
