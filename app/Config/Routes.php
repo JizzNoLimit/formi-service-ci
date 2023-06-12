@@ -49,6 +49,11 @@ $routes->group('forums', function ($routes) {
     $routes->get('(:segment)', 'DiskusiController::tampilDiskusiId/$1');
     $routes->post('/', 'DiskusiController::tambahDiskusi');
 });
+
+$routes->group('komentar', function ($routes) {
+    $routes->get('(:segment)', 'KomentarController::tampilKoment/$1');
+    $routes->post('/', 'KomentarController::buatKoment');
+});
 $routes->post('users', 'UserController::createUser');
 
 /*

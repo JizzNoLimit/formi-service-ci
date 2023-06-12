@@ -10,7 +10,7 @@ class DiskusiModel extends Model
     protected $useAutoIncrement = true;
     protected $returnType       = 'object';
     protected $allowedFields    = [
-        'id', 'title', 'slug', 'desk', 'total_koment', 'terjawab', 'user_id', 'created_at', 'updated_at'
+        'id', 'title', 'slug', 'desk', 'total_koment', 'terjawab', 'total_komentar', 'user_id', 'created_at', 'updated_at'
     ];
 
     // Dates
@@ -35,7 +35,7 @@ class DiskusiModel extends Model
 
     function getDiskusi($offset, $limit) {
         $builder = $this->db->table('diskusi');
-        $builder->select('diskusi.id, title, slug, desk, img, username AS author, terjawab, created_at, updated_at');
+        $builder->select('diskusi.id, title, slug, desk, img, username AS author, terjawab, total_komentar, created_at, updated_at');
         $builder->join('users', 'users.id = diskusi.user_id');
         $builder->orderBy('created_at', 'DESC');
         $query = $builder->get($limit, $offset);
@@ -44,7 +44,7 @@ class DiskusiModel extends Model
 
     function getDiskusiId($id) {
         $builder = $this->db->table('diskusi');
-        $builder->select('diskusi.id, title, slug, desk, img, username AS author, terjawab, created_at, updated_at');
+        $builder->select('diskusi.id, title, slug, desk, img, users.username AS author, terjawab, total_komentar, created_at, updated_at');
         $builder->join('users', 'users.id = diskusi.user_id');
         $builder->where('diskusi.id', $id);
         $query = $builder->get();
