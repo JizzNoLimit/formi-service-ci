@@ -9,15 +9,14 @@ class Tags extends Migration
     public function up() {
         $this->forge->addField([
             'id' => [
-                'type'           => 'BIGINT',
-                'constraint'     => 10,
-                'unsigned'       => true,
-                'auto_increment' => true,
+                'type'       => 'VARCHAR',
+                'constraint' => '25',
             ],
             'name' => [
                 'type'       => 'VARCHAR',
                 'constraint' => '25',
-                'null'       => false
+                'null'       => false,
+                'unique'     => true
             ],
             'desk' => [
                 'type'       => 'TEXT',

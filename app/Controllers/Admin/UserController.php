@@ -56,7 +56,7 @@ class UserController extends ResourceController
     }
 
     public function tampilUsersId($id) {
-        $users = $this->ProfileModel->getUserId($id);
+        $users = $this->UserModel->getUserId($id);
         if ($users == null) {
             return $this->failNotFound("data tidak ditemukan, mohon diperiksa kembali");
         }
@@ -103,14 +103,14 @@ class UserController extends ResourceController
 
         $this->ProfileModel->insert($profile);
 
-        $profileId = $this->ProfileModel->insertID();
+        $profileId = $this->ProfileModel->getInsertID();
         
         $data = [
             "username"   => (string) $username,
             "email"      => (string) $email,
             "password"   => password_hash($password, PASSWORD_BCRYPT),
             "role"       => (string) $role,
-            "profile_id" => intval($profileId)
+            "profile_id" => $profileId
         ];
 
         if (!$this->UserModel->insert($data)) {
