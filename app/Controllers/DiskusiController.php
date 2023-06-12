@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\Models\DiskusiModel;
-use App\Models\KomentModel;
 use App\Models\TagsDiskusiModel;
 use App\Models\TagsModel;
 use CodeIgniter\API\ResponseTrait;
@@ -37,11 +36,24 @@ class DiskusiController extends ResourceController
 
         $diskusi = $this-> DiskusiModel->getDiskusi($offset, $limit);
         $totalPage = $diskusi == null ? 0 : $totalPage;
+ 
+        $diskusis = array_map(function($diskusi) {
+            $diskusi = (array) $diskusi;
+            $id = intval($diskusi['id']);
+
+            $tags = $this->TagsDiskusiModel->getTagsName($id);
+
+            $data = [
+                ...$diskusi,
+                "tags" => $tags
+            ];
+            return $data;
+        }, $diskusi);
 
         $data = [
             "status"   => true,
             "message"  => "user forum mahasiswa jurusan manajemen informatika",
-            "data"     => $diskusi,
+            "data"     => $diskusis,
             "metadata" => [
                 "page"      => $page == 0 ? 1 : $page,
                 "totalRows" => $totalRows,
@@ -55,7 +67,6 @@ class DiskusiController extends ResourceController
     }
 
     public function tampilDiskusiId($id) {
-        $komentModel = new KomentModel();
         $diskusi = (array) $this->DiskusiModel->getDiskusiId($id)[0];
 
         if (!$diskusi) {
@@ -64,8 +75,6 @@ class DiskusiController extends ResourceController
 
         $tags = $this->TagsDiskusiModel->getTagsName($id);
 
-        $koment = $komentModel->where('diskusi_id', $id)->findAll();
-
         $data = [
             "status"   => true,
             "message"  => "data detail  forum mahasiswa jurusan manajemen informatika",
@@ -73,7 +82,6 @@ class DiskusiController extends ResourceController
                 ...$diskusi,
                 "tags" => $tags
             ],
-            "komentar" => $koment
         ];
         return $this->respond($data, 200);
     }
