@@ -90,43 +90,26 @@ class DiskusiController extends ResourceController
         $user_id = $this->request->getVar('user_id');
         $title = $this->request->getVar('title');
         $desk = $this->request->getVar('desk');
-        $img = $this->request->getFile('img');
         $tags = $this->request->getVar('tags');
-        
+
         $slug = substr(url_title($title ? $title : "", '-', true), 0, 80);
 
-        $img_name = null;
-
-        $validated = $this->validate([
-            'img'  => [
-                'uploaded[img]',
-                'mime_in[img,image/jpg,image/jpeg,image/gif,image/png]',
-                'max_size[img,2096]',
-            ]
-        ]);
-
-        if ($validated) {
-            $img_name = $img->getRandomName();
-            $img->move('uploads/diskusi', $img_name);
-        }
-        
         $data = [
             "title"   => $title,
             "desk"    => $desk,
-            "img"     => $img_name,
             "slug"    => (string) $slug,
             "user_id" => $user_id
         ];
 
         if (!$this->DiskusiModel->save($data)) {
             return $this->fail($this->DiskusiModel->errors());
-        }
+        } 
 
-        $data = (array) json_decode($tags);
+        $data = $tags;
 
         $this->TagsModel->upsertBatch($data);
 
-        $tags_diskusi = array_map(function($tag) {
+         $tags_diskusi = array_map(function($tag) {
             $diskusiId = $this->DiskusiModel->getInsertID();
             ["id" => $tags_id] = (array) $tag;
             $data = [
@@ -136,7 +119,7 @@ class DiskusiController extends ResourceController
             return $data;
         }, $data);
         
-        $this->TagsDiskusiModel->upsertBatch($tags_diskusi);
+         $this->TagsDiskusiModel->upsertBatch($tags_diskusi);
 
         foreach ($data as $tag) {
             ["id" => $id] = (array) $tag;
