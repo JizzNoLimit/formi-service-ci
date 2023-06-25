@@ -35,7 +35,7 @@ class DiskusiModel extends Model
 
     function getDiskusi($offset, $limit) {
         $builder = $this->db->table('diskusi');
-        $builder->select('diskusi.id, title, slug, desk, img, username AS author, terjawab, total_komentar, created_at, updated_at');
+        $builder->select('diskusi.id, title, slug, desk, img, user_id, username AS author, role, terjawab, total_komentar, created_at, updated_at');
         $builder->join('users', 'users.id = diskusi.user_id');
         $builder->orderBy('created_at', 'DESC');
         $query = $builder->get($limit, $offset);
