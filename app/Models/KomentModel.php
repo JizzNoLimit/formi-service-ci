@@ -33,7 +33,11 @@ class KomentModel extends Model
         $builder = $this->db->table('koment');
         $builder->select('koment.id, konten, user_id, users.username, users.role, diskusi_id, parent_id, created_at, updated_at');
         $builder->join('users', 'users.id = koment.user_id');
-        $builder->where('diskusi_id', $id);
+        $builder->where([
+            'diskusi_id' => $id,
+            'parent_id'  => null
+        ]);
+        $builder->orderBy('created_at', 'ASC');
         $query = $builder->get();
         return $query->getResult();
     }
