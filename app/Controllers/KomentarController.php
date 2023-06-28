@@ -22,7 +22,7 @@ class KomentarController extends ResourceController
 
         $data = array_map(function($komen) {
             $array = (array) $komen;
-            $test = $this->KomentModel->where('parent_id', $komen->id)->findAll();
+            $test = $this->KomentModel->getReply($komen->id);
             $data = [
                 ...$array,
                 "reply" => $test
