@@ -20,9 +20,8 @@ class Filters extends BaseConfig
         'toolbar'       => DebugToolbar::class,
         'honeypot'      => Honeypot::class,
 
-        'options'        => \App\Filters\CorsFilter::class,
+        'auth'          => \App\Filters\UserFilter::class,
         'adminFilter'    => \App\Filters\AdminFilter::class,
-        // 'accesFilter'    => \App\Filters\AccesFilter::class,
     ];
 
     /**
@@ -31,7 +30,7 @@ class Filters extends BaseConfig
      */
     public array $globals = [
         'before' => [
-            'options'
+            // 'options'
         ],
         'after' => [
             'toolbar',
@@ -61,6 +60,28 @@ class Filters extends BaseConfig
      * 'isLoggedIn' => ['before' => ['account/*', 'profiles/*']]
      */
     public array $filters = [
-        // 'adminFilter' => ['before' => ['admin/*'], 'after' => ['']],
+        'auth' => [
+            'before' => [
+                // Diskusi
+                'postDiskusi',
+                'editDiskusi/*',
+                'deleteDiskusi',
+
+                // Komentar
+                'postKomentar',
+                'editKomentar/*',
+                'deleteKomenter',
+
+                // Blogs
+                'postBlogs',
+                'deleteBlogs',
+                'editBlogs/*',
+
+            ], 
+            'after' => ['']],
+        'adminFilter' => [
+            'before' => ['admin/*'], 
+            'after' => ['']
+        ],
     ];
 }

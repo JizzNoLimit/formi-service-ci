@@ -78,11 +78,10 @@ class AuthController extends ResourceController
         $username = $this->Request->getVar('username');
         $email = $this->Request->getVar('email');
         $password = $this->Request->getVar('password');
-        $role = $this->Request->getVar('role');
         $nim = $this->Request->getVar('nim');
         $first_name = $this->Request->getVar('first_name');
         $last_name = $this->Request->getVar('last_name');
-        $tgl_lahir = $this->Request->getVar('tgl_lahir');
+        $alamat = $this->Request->getVar('alamat');
 
         if (!$username || !$email || !$password || !$nim) {
             return $this->respond([
@@ -111,11 +110,11 @@ class AuthController extends ResourceController
             "username"      => (string) $username,
             "email"         => (string) $email,
             "password"      => (string) $hash,
-            "role"          => $role,
+            "role"          => "mahasiswa",
+            "alamat"        => $alamat,
             "nim"           => $nim,
             "first_name"    => $first_name,
             "last_name"     => $last_name,
-            "tgl_lahir"     => intval($tgl_lahir),
         ];
 
         $userVerification->insert($data);

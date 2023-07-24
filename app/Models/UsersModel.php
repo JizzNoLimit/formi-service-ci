@@ -30,14 +30,14 @@ class UsersModel extends Model
         $builder = $this->db->table('users');
         $builder->select('users.id, username, email, role, profile_id, profile.nim, profile.first_name, profile.last_name, profile.tgl_lahir, profile.alamat, profile.bio, profile.foto, profile.created_at, profile.updated_at');
         $builder->join('profile', 'profile.id = users.profile_id');
-        $builder->like('nim', $search)->orLike('username', $search)->orLike('email', $search);
+        $builder->like('nim', $search)->orLike('username', $search)->orLike('email', $search)->orLike('first_name', $search)->orLike('last_name', $search);
         $query = $builder->get($limit, $offset);
         return $query->getResult();
     }
 
     public function getUserId($id) {
         $builder = $this->db->table('users');
-        $builder->select('users.id, username, email, role, profile_id, profile.nim, profile.first_name, profile.last_name, profile.tgl_lahir, profile.alamat, profile.bio, profile.foto, profile.created_at, profile.updated_at');
+        $builder->select('users.id, username, email, password, role, profile_id, profile.nim, profile.first_name, profile.last_name, profile.tgl_lahir, profile.alamat, profile.bio, profile.foto, profile.created_at, profile.updated_at');
         $builder->join('profile', 'profile.id = users.profile_id');
         $builder->where('users.id', $id);
         $query = $builder->get();
@@ -50,5 +50,14 @@ class UsersModel extends Model
         $builder->like('nim', $search)->orLike('username', $search)->orLike('email', $search);
         $query = $builder->countAllResults();
         return $query;
+    }
+
+    function getAuthor($id) {
+        $builder = $this->db->table('users');
+        $builder->select('users.id, username, email, role, profile.nim, profile.foto');
+        $builder->join('profile', 'profile.id = users.profile_id');
+        $builder->where('users.id', $id);
+        $query = $builder->get();
+        return $query->getResult();
     }
 }

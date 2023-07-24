@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\DiskusiModel;
 use App\Models\TagsDiskusiModel;
 use App\Models\TagsModel;
+use App\Models\UsersModel;
 use CodeIgniter\API\ResponseTrait;
 use CodeIgniter\RESTful\ResourceController;
 
@@ -15,12 +16,14 @@ class DiskusiController extends ResourceController
     protected $DiskusiModel;
     protected $TagsModel;
     protected $TagsDiskusiModel;
+    protected $UsersModel;
 
     public function __construct() {
         $this->request = service("request");
         $this->DiskusiModel = new DiskusiModel();
         $this->TagsModel = new TagsModel();
         $this->TagsDiskusiModel = new TagsDiskusiModel();
+        $this->UsersModel = new UsersModel();
     }
 
     public function tampilDiskusi() {
@@ -34,18 +37,21 @@ class DiskusiController extends ResourceController
         $totalRows = $this->DiskusiModel->countAllResults();
         $totalPage = ceil($totalRows / $limit);
 
-        $diskusi = $this-> DiskusiModel->getDiskusi($offset, $limit);
+        $diskusi = $this->DiskusiModel->getDiskusi($offset, $limit);
         $totalPage = $diskusi == null ? 0 : $totalPage;
  
         $diskusis = array_map(function($diskusi) {
             $diskusi = (array) $diskusi;
             $id = intval($diskusi['id']);
+            $user_id = intval($diskusi['user_id']);
 
             $tags = $this->TagsDiskusiModel->getTagsName($id);
+            $user = $this->UsersModel->getAuthor($user_id)[0];
 
             $data = [
                 ...$diskusi,
-                "tags" => $tags
+                "tags"   => $tags,
+                "author" => $user
             ];
             return $data;
         }, $diskusi);
@@ -67,20 +73,22 @@ class DiskusiController extends ResourceController
     }
 
     public function tampilDiskusiId($id) {
-        $diskusi = (array) $this->DiskusiModel->getDiskusiId($id)[0];
+        $diskusi = (array) $this->DiskusiModel->find($id);
 
         if (!$diskusi) {
             return $this->failNotFound("diskusi tidak ditemukan, mohon diperiksa kembali url anda");
         }
 
         $tags = $this->TagsDiskusiModel->getTagsName($id);
+        $user = $this->UsersModel->getAuthor($diskusi['user_id'])[0];
 
         $data = [
             "status"   => true,
             "message"  => "data detail  forum mahasiswa jurusan manajemen informatika",
             "data"     => [
                 ...$diskusi,
-                "tags" => $tags
+                "tags"   => $tags,
+                "author" => $user
             ],
         ];
         return $this->respond($data, 200);
@@ -109,7 +117,7 @@ class DiskusiController extends ResourceController
 
         $this->TagsModel->upsertBatch($data);
 
-         $tags_diskusi = array_map(function($tag) {
+        $tags_diskusi = array_map(function($tag) {
             $diskusiId = $this->DiskusiModel->getInsertID();
             ["id" => $tags_id] = (array) $tag;
             $data = [
@@ -137,7 +145,7 @@ class DiskusiController extends ResourceController
     }
 
     function editDiskusi($id) {
-        $user_id = $this->request->getVar('user_id');
+        $user_id = $this->request->getGet('user_id');
 
         $diskusi = $this->DiskusiModel->find($id);
 

@@ -39,7 +39,7 @@ class UserFilter implements FilterInterface
         try {
             // $decoded = JWT::decode($token, $key, array("HS256"));
             $decoded = JWT::decode($token, new Key($key, 'HS256'));
-            if ($decoded->role !== "mahasiswa") {
+            if ($decoded->role !== "mahasiswa" && $decoded->role !== "dosen") {
                 $response = service('response');
                 $response->setBody('Access denied');
                 $response->setStatusCode(401);
