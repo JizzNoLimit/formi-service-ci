@@ -20,10 +20,20 @@ class KomentarController extends ResourceController
     public function tampilKoment($id) {
         $komens = $this->KomentModel->getKomentDiskusiId($id);
 
+        $data = array_map(function($komen) {
+            $array = (array) $komen;
+            $test = $this->KomentModel->getReply($komen->id);
+            $data = [
+                ...$array,
+                "reply" => $test
+            ];
+            return $data;
+        }, $komens);
+
         $data = [
             "status"   => true,
             "message"  => "user forum mahasiswa jurusan manajemen informatika",
-            "data"     => $komens,
+            "data"     => $data,
         ];
 
         return $this->respond($data, 200);

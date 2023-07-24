@@ -19,4 +19,13 @@ class TagsDiskusiModel extends Model
         $query = $builder->get();
         return $query->getResult();
     }
+
+    public function getDiskusiByTags($offset, $limit, $id) {
+        $builder = $this->db->table('tags_diskusi');
+        $builder->join('diskusi', 'diskusi.id = tags_diskusi.diskusi_id');
+        $builder->where('tags_id', $id);
+        $builder->orderBy("created_at", "DESC");
+        $query = $builder->get($limit, $offset);
+        return $query->getResult();
+    }
 }

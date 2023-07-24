@@ -30,7 +30,7 @@ class UserController extends ResourceController
         
         if ($page == 0) { $page = 1; }
 
-        $limit = $limit != 0 ? $limit : 10;  
+        $limit = $limit != 0 ? $limit : 16;  
 
         $offset = $limit * ($page - 1);
 
@@ -81,6 +81,8 @@ class UserController extends ResourceController
         $nim = $this->Request->getVar('nim');
         $first_name = $this->Request->getVar('first_name');
         $last_name = $this->Request->getVar('last_name');
+        $alamat = $this->Request->getVar('alamat');
+
 
         $user = $this->UserModel->where('username', $username)->orWhere('email', $email)->first();
         if ($user != null && $username === $user->username) {
@@ -99,6 +101,7 @@ class UserController extends ResourceController
             "nim"        => (string) $nim,
             "first_name" => (string) $first_name,
             "last_name"  => (string) $last_name,
+            "alamat"     => (string) $alamat,
         ];
 
         $this->ProfileModel->insert($profile);
@@ -141,41 +144,29 @@ class UserController extends ResourceController
         $nim = $this->Request->getVar('nim');
         $first_name = $this->Request->getVar('first_name');
         $last_name = $this->Request->getVar('last_name');
+        $alamat = $this->Request->getVar('alamat');
 
-        if ($username === $user->username) {
-            return $this->respond([
-                "status"  => false,
-                "message" => "username: ". $username ." sudah digunakan"
-            ], 302);
-        } elseif ($email === $user->email) {
-            return $this->respond([
-                "status"  => false,
-                "message" => "email: " . $email . " sudah digunakan"
-            ], 302);
+        if ($password) {
+            $password = password_hash($password, PASSWORD_BCRYPT);
         }
 
-        $hash = password_hash($password, PASSWORD_BCRYPT);
-
         $data = [
-            "username" => (string) $username != null ? $username : $user->username,
-            "email"    => (string) $email != null ? $email : $user->email,
-            "password" => (string) $password != null ? $hash : $user->password,
-            "role"     => (string) $role != null ? $role : $user->role,
+            "username" => (string) !$username ? $user->username : $username,
+            "email"    => (string) !$email ? $user->email : $email,
+            "password" => (string) !$password ? $user->password : $password,
+            "role"     => (string) !$role ? $user->role : $role,
         ];
 
         $this->UserModel->update($id, $data);
 
-        if (!$this->UserModel->update($data)) {
-            return $this->fail($this->UserModel->errors());
-        }
-
         $profile = [
-            "nim"        => (string) $nim != null ? $nim : $user->nim,
-            "first_name" => (string) $first_name != null ? $first_name : $user->first_name,
-            "last_name"  => (string) $last_name != null ? $last_name : $user->last_name,
+            "nim"        => (string) !$nim ? $user->nim : $nim,
+            "first_name" => (string) !$first_name ? $user->first_name : $first_name,
+            "last_name"  => (string) !$last_name ? $user->last_name : $last_name,
+            "alamat"     => (string) !$alamat ? $user->alamat : $alamat,
         ];
 
-        $this->ProfileModel->update($user->id, $profile);
+        $this->ProfileModel->update($user->profile_id, $profile);
 
         return $this->respond([
             "status"  => true,
@@ -200,6 +191,40 @@ class UserController extends ResourceController
             "message" => "hapus data user berhasil",
             "data"    => $user
         ]);
+    }
+
+    public function tampilVerification() {
+        $UserVerification = new UserVerificationModel();
+
+        $search = (string) $this->Request->getGet('q');
+        $page = intval($this->Request->getGet('page'));
+        $limit = intval($this->Request->getGet('limit'));
+        
+        if ($page == 0) { $page = 1; }
+
+        $limit = $limit != 0 ? $limit : 16;  
+
+        $offset = $limit * ($page - 1);
+
+        $totalRows = $UserVerification->totalData($search);
+        $totalPage = ceil($totalRows / $limit);
+
+        $users = $UserVerification->getUser($search, $offset, $limit);
+        if (!$users) { $totalPage = 0; }
+
+        $data = [
+            "status"   => true,
+            "message"  => "user forum mahasiswa jurusan manajemen informatika",
+            "data"     => $users,
+            "metadata" => [
+                "page"      => $page == 0 ? 1 : $page,
+                "totalRows" => $totalRows,
+                "totalPage" => $totalPage,
+                "offset"    => $offset,
+                "limit"     => $limit
+            ],
+        ];
+        return $this->respond($data, 200);
     }
 
     public function verification($id) {

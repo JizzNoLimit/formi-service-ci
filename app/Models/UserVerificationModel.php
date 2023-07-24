@@ -16,4 +16,18 @@ class UserVerificationModel extends Model
     protected $dateFormat    = 'int';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
+
+    public function getUser($search, $offset, $limit) {
+        $builder = $this->db->table('users_verifications');
+        $builder->like('nim', $search)->orLike('username', $search)->orLike('email', $search)->orLike('first_name', $search)->orLike('last_name', $search);
+        $query = $builder->get($limit, $offset);
+        return $query->getResult();
+    }
+
+    function totalData($search) {
+        $builder = $this->db->table('users_verifications');
+        $builder->like('nim', $search)->orLike('username', $search)->orLike('email', $search);
+        $query = $builder->countAllResults();
+        return $query;
+    }
 }

@@ -4,10 +4,9 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class Diskusi extends Migration
+class Pengumuman extends Migration
 {
-    public function up()
-    {
+    public function up() {
         $this->forge->addField([
             'id' => [
                 'type'           => 'BIGINT',
@@ -20,34 +19,24 @@ class Diskusi extends Migration
                 'constraint' => '300',
                 'null'       => false
             ],
-            'desk' => [
-                'type'       => 'TEXT',
-                'null'       => false
-            ],
             'slug' => [
                 'type'       => 'VARCHAR',
                 'constraint' => '150',
                 'null'       => false,
                 'unique'     => true
             ],
-            'terjawab' => [
-                'type'       => 'BOOLEAN',
-                'default'    => false
+            'konten' => [
+                'type'       => 'TEXT',
+                'null'       => false
             ],
-            'views' => [
-                'type'       => 'INT',
-                'unsigned'   => true,
-                'default'    => 0
+            'gambar' => [
+                'type'       => 'VARCHAR',
+                'constraint' => '150',
+                'null'       => true
             ],
-            'total_komentar' => [
-                'type'       => 'INT',
-                'unsigned'   => true,
-                'default'    => 0
-            ],
-            'user_id' => [
-                'type'       => 'BIGINT',
-                'constraint' => 10,
-                'unsigned'   => true,
+            'file' => [
+                'type'       => 'VARCHAR',
+                'constraint' => '150',
                 'null'       => true
             ],
             'created_at' => [
@@ -60,15 +49,13 @@ class Diskusi extends Migration
                 'unsigned'  => true,
                 'null'      => true
             ]
+            
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->addForeignKey('user_id', 'users', 'id', 'NO ACTION', 'SET NULL', 'fk_users_id_diskusi');
-        $this->forge->createTable('diskusi');
+        $this->forge->createTable('pengumuman');
     }
 
-    public function down()
-    {
-        $this->forge->dropForeignKey('diskusi', 'fk_users_id_diskusi');
-        $this->forge->dropTable('diskusi');
+    public function down() {
+        $this->forge->dropTable('pengumuman');
     }
 }

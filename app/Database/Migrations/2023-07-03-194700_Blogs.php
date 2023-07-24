@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class Diskusi extends Migration
+class Blogs extends Migration
 {
     public function up()
     {
@@ -16,11 +16,11 @@ class Diskusi extends Migration
                 'auto_increment' => true,
             ],
             'title' => [
-                'type'       => 'TEXT',
-                'constraint' => '300',
+                'type'       => 'VARCHAR',
+                'constraint' => 255,
                 'null'       => false
             ],
-            'desk' => [
+            'konten' => [
                 'type'       => 'TEXT',
                 'null'       => false
             ],
@@ -30,19 +30,10 @@ class Diskusi extends Migration
                 'null'       => false,
                 'unique'     => true
             ],
-            'terjawab' => [
-                'type'       => 'BOOLEAN',
-                'default'    => false
-            ],
-            'views' => [
-                'type'       => 'INT',
-                'unsigned'   => true,
-                'default'    => 0
-            ],
-            'total_komentar' => [
-                'type'       => 'INT',
-                'unsigned'   => true,
-                'default'    => 0
+            'img' => [
+                'type'       => 'VARCHAR',
+                'constraint' => '150',
+                'null'       => true,
             ],
             'user_id' => [
                 'type'       => 'BIGINT',
@@ -62,13 +53,13 @@ class Diskusi extends Migration
             ]
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->addForeignKey('user_id', 'users', 'id', 'NO ACTION', 'SET NULL', 'fk_users_id_diskusi');
-        $this->forge->createTable('diskusi');
+        $this->forge->addForeignKey('user_id', 'users', 'id', 'NO ACTION', 'SET NULL', 'fk_users_id_blogs');
+        $this->forge->createTable('blogs');
     }
 
     public function down()
     {
-        $this->forge->dropForeignKey('diskusi', 'fk_users_id_diskusi');
-        $this->forge->dropTable('diskusi');
+        $this->forge->dropForeignKey('blogs', 'fk_users_id_blogs');
+        $this->forge->dropTable('blogs');
     }
 }
